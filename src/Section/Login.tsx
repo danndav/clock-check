@@ -1,9 +1,41 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { fDate } from '../utils/formatTime'
+import Spinner from '../../components/spinner/Spinner'
+import axios from 'axios'
+import { error } from 'console'
 
-const Layout = ({ nearby = false} : {nearby : boolean}) => {
+const Layout = ({ nearby = false, location }: {
+    nearby: boolean, location: {
+        latitude: any,
+        longitude: any
+    }
+}) => {
+    const [isSubmit, setIsSubmit] = useState(false)
+    const [eaNumber, setEaNumber] = useState("")
+    const [errorMes, setErrorMes] = useState("")
 
     const date = new Date()
+
+    const checkIn = async () => {
+        if (eaNumber == "") {
+            setErrorMes("Enter your EA number")
+        } else {
+            setErrorMes("")
+            setIsSubmit(true)
+            const body = {
+                workforceId: eaNumber,
+                latitude:location.latitude,
+                longitude:location.longitude
+            }
+            setIsSubmit(true)
+            try {
+                await axios.post("https://clockapi.septasoftware.com/save-attendance", body)
+            } catch (error) {
+                setIsSubmit(false)
+            }
+        }
+       
+    }
 
     return (
         <div className='w-full bg-[#F6F5F5] h-full '>
@@ -29,10 +61,11 @@ const Layout = ({ nearby = false} : {nearby : boolean}) => {
                         <div className='mt-4'>
                             <div>
                                 <label className='text-[#4F5559] text-xs'>EA number</label>
-                                <input placeholder='EA83...' className=' w-full  px-3 mt-1 h-[48px] border rounded ' />
+                                <input onChange={(e) => setEaNumber(e.target.value)} placeholder='EA83...' className=' w-full  px-3 mt-1 h-[48px] border rounded ' />
+                               <h3 className='text-xs text-red-400'>{errorMes}</h3> 
                             </div>
 
-                            <button disabled={!nearby} className='w-[180px] mx-auto text-white mt-8 h-[48px] flex items-center justify-center bg-[#6839BB] rounded '>Clock in</button>
+                            <button onClick={() =>checkIn()} disabled={!nearby} className='w-[180px] disabled:bg-gray-500 mx-auto text-white mt-8 h-[48px] flex items-center justify-center bg-[#6839BB] rounded '>{isSubmit ? <Spinner color='#fff' /> : "Clock in"}</button>
 
                         </div>
                     </div>
