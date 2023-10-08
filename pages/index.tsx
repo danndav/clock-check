@@ -17,7 +17,7 @@ const Home = () => {
       navigator.geolocation.getCurrentPosition((position) => {
         const userLatitude = position.coords.latitude;
         const userLongitude = position.coords.longitude;
-        console.log(userLatitude, userLongitude);
+        // console.log(userLatitude, userLongitude);
         setLocation({
           latitude:userLatitude,
           longitude:userLongitude
@@ -25,7 +25,7 @@ const Home = () => {
 
         // Call the function to check the distance
         setIsNearby(checkDistance(userLatitude, userLongitude));
-        console.log(checkDistance(userLatitude, userLongitude));
+        // console.log(checkDistance(userLatitude, userLongitude));
         
       });
     } else {
