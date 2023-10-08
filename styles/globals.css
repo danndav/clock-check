@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: "CircularStd";
+    src: url("../fonts/circularStd/CircularStd-Black.ttf");
+    font-weight: bolder;
+}
+
+@font-face {
+    font-family: "CircularStd";
+    src: url("../fonts/circularStd/CircularStd-Bold.ttf");
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: "CircularStd";
+    src: url("../fonts/circularStd/CircularStd-Book.ttf");
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: "CircularStd";
+    src: url("../fonts/circularStd/CircularStd-Medium.ttf");
+    font-weight:500;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+*{
+    font-family: "CircularStd", sans-serif;
+    scroll-behavior: smooth;
+}
