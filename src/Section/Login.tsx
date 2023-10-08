@@ -47,7 +47,7 @@ const Layout = ({ nearby = false, location }: {
                 </div>
 
             </div>
-            <div className='flex py-20 items-center justify-center'>
+            <div className='flex py-16 items-center justify-center'>
                 <div className='w-full mx-auto md:w-[729px] h-auto'>
                     <h3 className='text-4xl text-center tracking-widest font-normal'>Welcome Royalty!</h3>
                     {/* <h5 className='text-2xl font-bold'>{date.toDateString()}</h5> */}
@@ -55,7 +55,7 @@ const Layout = ({ nearby = false, location }: {
                         <h3 className='text-5xl text-center  font-semibold '>{date.getHours()} : {date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()} <span className='text-xs'>{date.getHours() < 12 ? "AM" : "PM"}</span></h3>
 
                     </div> */}
-                    <img src='/clock.png' className='block mx-auto mt-6' />
+                    <img src='/clock.png' className='block h-[200px] w-auto mx-auto mt-6' />
                     <div className='w-full rounded py-4 px-4 border bg-white mt-4'>
                         <h3 className='text-center text-sm border-b pb-3'>Kindly enter your EA Number to clock in</h3>
                         <div className='mt-4'>
