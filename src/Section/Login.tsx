@@ -31,6 +31,7 @@ const Layout = ({ nearby = false, location }: {
             setIsSubmit(true)
             try {
               const res =  await axios.post("https://clockapi.septasoftware.com/save-attendance", body)
+              setIsSubmit(false)
               if(res.status == 201) toast.success(res.data.message)
             } catch (error) {
                 setIsSubmit(false)
