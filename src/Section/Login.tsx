@@ -3,6 +3,7 @@ import { fDate } from '../utils/formatTime'
 import Spinner from '../../components/spinner/Spinner'
 import axios from 'axios'
 import { error } from 'console'
+import { Toaster, toast } from 'react-hot-toast'
 
 const Layout = ({ nearby = false, location }: {
     nearby: boolean, location: {
@@ -29,9 +30,11 @@ const Layout = ({ nearby = false, location }: {
             }
             setIsSubmit(true)
             try {
-                await axios.post("https://clockapi.septasoftware.com/save-attendance", body)
+              const res =  await axios.post("https://clockapi.septasoftware.com/save-attendance", body)
+              if(res.status == 201) toast.success(res.data.message)
             } catch (error) {
                 setIsSubmit(false)
+                toast.error("please try again!")
             }
         }
        
@@ -39,6 +42,7 @@ const Layout = ({ nearby = false, location }: {
 
     return (
         <div className='w-full bg-[#F6F5F5] h-full '>
+            <Toaster />
             <div className='w-full text-white relative flex flex-col md:flex-row  md:justify-center items-center px-20 py-10 bg-[#6839BB]'>
                 <img className='md:absolute left-3 md:left-10' src='/logo.png' />
                 <div className='md:mx-auto ml-auto'>
