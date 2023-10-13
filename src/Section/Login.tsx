@@ -117,7 +117,7 @@ const Layout = ({ nearby = false, location }: {
 
 
 
-                            <button onClick={() => checkIn()} disabled={!nearby} className='w-[180px] disabled:bg-gray-500 mx-auto text-white mt-8 h-[48px] flex items-center justify-center bg-[#6839BB] rounded '>{isSubmit ? <Spinner color='#fff' /> : "Clock in"}</button>
+                            <button onClick={() => checkIn()} disabled={!nearby && details !== null} className='w-[180px] disabled:bg-gray-500 mx-auto text-white mt-8 h-[48px] flex items-center justify-center bg-[#6839BB] rounded '>{isSubmit ? <Spinner color='#fff' /> : "Clock in"}</button>
 
                         </div>
                     </div>

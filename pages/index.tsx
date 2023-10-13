@@ -34,7 +34,7 @@ const Home = () => {
     }
   }
 
-  console.log(isNearby);
+  // console.log(isNearby);
   
 
   useEffect(() => {
