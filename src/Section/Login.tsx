@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { fDate } from '../utils/formatTime'
 import Spinner from '../../components/spinner/Spinner'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { error } from 'console'
 import { Toaster, toast } from 'react-hot-toast'
 
@@ -14,8 +14,47 @@ const Layout = ({ nearby = false, location }: {
     const [isSubmit, setIsSubmit] = useState(false)
     const [eaNumber, setEaNumber] = useState("")
     const [errorMes, setErrorMes] = useState("")
+    const [debouncedText, setDebouncedText] = useState('');
+    const [details, setDetails] = useState<any>(null)
 
     const date = new Date()
+
+    useEffect(() => {
+        // Set a timeout to update the debouncedText after a delay (e.g., 300ms).
+        const debounceTimer = setTimeout(() => {
+            setDebouncedText(eaNumber);
+        }, 1000);
+
+        // Clean up the timeout on every text change to prevent unnecessary executions.
+        return () => clearTimeout(debounceTimer);
+    }, [eaNumber]);
+
+    const userInfo = async () => {
+        if (eaNumber == "") {
+            setErrorMes("Enter your EA number")
+        } else {
+            setErrorMes("")
+            const body = {
+                eaNumber: eaNumber,
+            }
+
+            try {
+                const res = await axios.post("https://clockapi.septasoftware.com/users/verify-eanumber", body)
+                // console.log(res);
+                setDetails(res.data.user)
+
+            } catch (error: any) {
+                setErrorMes(error.response.data.message);
+
+            }
+        }
+    }
+
+    useEffect(() => {
+
+        userInfo()
+
+    }, [debouncedText])
 
     const checkIn = async () => {
         if (eaNumber == "") {
@@ -25,20 +64,20 @@ const Layout = ({ nearby = false, location }: {
             setIsSubmit(true)
             const body = {
                 workforceId: eaNumber,
-                latitude:location.latitude,
-                longitude:location.longitude
+                latitude: location.latitude,
+                longitude: location.longitude
             }
             setIsSubmit(true)
             try {
-              const res =  await axios.post("https://clockapi.septasoftware.com/save-attendance", body)
-              setIsSubmit(false)
-              if(res.status == 201) toast.success(res.data.message)
+                const res = await axios.post("https://clockapi.septasoftware.com/save-attendance", body)
+                setIsSubmit(false)
+                if (res.status == 201) toast.success(res.data.message)
             } catch (error) {
                 setIsSubmit(false)
                 toast.error("please try again!")
             }
         }
-       
+
     }
 
     return (
@@ -66,11 +105,19 @@ const Layout = ({ nearby = false, location }: {
                         <div className='mt-4'>
                             <div>
                                 <label className='text-[#4F5559] text-xs'>EA number</label>
-                                <input onChange={(e) => setEaNumber(e.target.value)} placeholder='EA83...' className=' w-full  px-3 mt-1 h-[48px] border rounded ' />
-                               <h3 className='text-xs text-red-400'>{errorMes}</h3> 
+                                <input onChange={(e) => setEaNumber(e.target.value)} placeholder='EA/83...' className=' w-full  px-3 mt-1 h-[48px] border rounded ' />
+                                <h3 className='text-xs text-red-400'>{errorMes}</h3>
                             </div>
+                            {details !== null && (
+                                <div className='w-full flex gap-3 items-center justify-center rounded text-sm px-5 h-[80px] mt-3 bg-[#d292fc27]'>
+                                   <h3>Name: {details?.name}</h3>
+                                   <h3 className='text-sm'>EA Number: {details?.ea_number}</h3>
+                                </div>
+                            )}
 
-                            <button onClick={() =>checkIn()} disabled={!nearby} className='w-[180px] disabled:bg-gray-500 mx-auto text-white mt-8 h-[48px] flex items-center justify-center bg-[#6839BB] rounded '>{isSubmit ? <Spinner color='#fff' /> : "Clock in"}</button>
+
+
+                            <button onClick={() => checkIn()} disabled={!nearby} className='w-[180px] disabled:bg-gray-500 mx-auto text-white mt-8 h-[48px] flex items-center justify-center bg-[#6839BB] rounded '>{isSubmit ? <Spinner color='#fff' /> : "Clock in"}</button>
 
                         </div>
                     </div>

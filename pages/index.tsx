@@ -39,7 +39,7 @@ const Home = () => {
 
   useEffect(() => {
     geolocation()
-  })
+  },[])
 
   // console.log(geolocation());
 
